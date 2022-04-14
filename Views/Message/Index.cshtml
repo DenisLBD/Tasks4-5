@@ -1,0 +1,56 @@
+@model Users.ViewModels.MessageViewModel
+
+
+<h2>Send a message</h2>
+<body>
+    
+        
+    <form method="post" asp-controller="Message" asp-action="Send">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="RecipientName"></label><br />
+            <input asp-for="RecipientName" />
+            <span asp-validation-for="RecipientName"></span>
+        </div>
+        <div>
+            <label asp-for="Topic"></label><br />
+            <input asp-for="Topic" />
+        </div>
+        <div>
+            <label asp-for="Message"></label><br />
+            <textarea name="Message"></textarea>
+        </div>
+        <br />
+
+        <div class="d-flex flex-row">
+            <div class="p-2">
+                <button type="submit" class="btn btn-success">
+                    Send
+                </button>
+            </div>
+            <div class="p-2">
+                <a class="btn btn-primary" href="~/Users/Index" role="button"> Cancel </a>
+            </div>
+        </div>
+    </form>   
+
+
+    <script src="~/wwwroot/js/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/chat")
+            .build();
+
+        // getting message from server
+        hubConnection.on('Notify', function (message) {
+
+            // create <p> for user
+            let elem = document.createElement("p");
+            elem.appendChild(document.createTextNode(message));
+
+            document.getElementById("notify").appendChild(elem);
+
+        });
+        hubConnection.start();
+    </script>
+</body>

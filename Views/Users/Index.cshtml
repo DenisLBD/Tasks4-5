@@ -1,0 +1,129 @@
+@model IEnumerable<Users.Models.User>
+@{
+    ViewBag.Title = "List of users";
+
+}
+
+<p class="text-right">@User.Identity.Name</p>
+
+<body>
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <p class="text-right">
+            <button type="submit" class="btn btn-outline-dark">Logout</button>
+        </p>
+    </form>
+
+    <br />
+    <br />
+
+    <div class="d-flex">
+        <div class="mr-auto p-2">
+            <form asp-action="UnBlockUsers" method="post">
+                <button type="submit" class="btn btn-success">
+                    Unblock All Users
+                </button>
+            </form>
+        </div>
+        <div class="mr-auto p-2">
+            <form asp-action="BlockUsers" method="post">
+                <button type="submit" class="btn btn-primary">
+                    Block All Users
+                </button>
+            </form>
+        </div>
+        <div class="mr-auto p-2">
+            <form asp-action="DeleteUsers" method="post">
+                <button type="submit" class="btn btn-danger">
+                    Delete All Users
+                </button>
+            </form>
+        </div>
+
+        <div class="p-2">
+            <a class="btn btn-dark" href="~/Message/Index" role="button">
+                Send Message
+            </a>
+        </div>
+        <div class="p-2">
+            <a class="btn btn-dark" href="~/Message/Inbox" role="button">
+                Inbox
+            </a>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-stretch">
+        <div class="align-self-stretch">
+            <p><label><input class="form-check-input" type="checkbox" id="checkbox"></label></p><br />
+
+            <form method="post">
+                <p id="controls">
+                    @foreach (var user in Model)
+                    {
+                        <label><input class="form-check-input" type="checkbox" name="ch" /></label><br /><br /><br />
+                    }
+                </p>
+            </form>
+        </div>
+
+        <div class="p-2">
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>EMail</th>
+                    <th>Register Date</th>
+                    <th>Last Seen</th>
+                    <th>Status</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.RegistrationDate</td>
+                        <td>@user.LastLoginDate</td>
+                        <td>@user.UserStatus</td>
+                        <td>
+                            <form asp-action="UnBlock" asp-route-id="@user.Id" method="post">
+                                <button type="submit" class="btn btn-success">
+                                    Unblock
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-action="Block" asp-route-id="@user.Id" method="post">
+                                <button type="submit" class="btn btn-primary">
+                                    Block
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                                <button type="submit" class="btn btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        $('#checkbox').click(function () {
+            if ($(this).is(':checked')) {
+                $('#controls input:checkbox').prop('checked', true);
+            } else {
+                $('#controls input:checkbox').prop('checked', false);
+            }
+        });
+    </script>
+</body>

@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h><p class="text-center">@User.Identity.Name</p></h>
+
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+            <a class="btn btn-primary" href="~/Users/Index" role="button">
+                Show Table
+            </a>
+        </div>
+        <div class="col-md-auto">
+            <form method="post" asp-controller="Account" asp-action="Logout">
+                <button type="submit" class="btn btn-outline-dark">Logout</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <h><p class="text-center">Welcome to website!</p></h>
+    <form method="post" asp-controller="Account" asp-action="Login">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Sing in</button>
+    </form>
+    <form method="post" asp-controller="Account" asp-action="Register">
+        <button type="submit" class="btn btn-secondary btn-lg btn-block">Sing up</button>
+    </form>
+}
